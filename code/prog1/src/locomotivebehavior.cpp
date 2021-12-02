@@ -16,12 +16,28 @@ void LocomotiveBehavior::run()
 
     /* A vous de jouer ! */
 
+
     // Vous pouvez appeler les méthodes de la section partagée comme ceci :
     //sharedSection->request(loco);
     //sharedSection->getAccess(loco);
     //sharedSection->leave(loco);
 
-    while(1) {}
+    int turn = 0;
+
+    while(1) {
+        turn < 2 ? attendre_contact(entree) : attendre_contact(sortie);
+        sharedSection->access(loco);
+        diriger_aiguillage(16, sens, 0);
+        diriger_aiguillage(11, sens, 0);
+        turn < 2 ? attendre_contact(sortie) : attendre_contact(entree);
+        sharedSection->leave(loco);
+        if (turn % 2) {
+            // changement de sens
+            attendre_contact(depart);
+            loco.inverserSens();
+        }
+        turn = (turn + 1) % 4;
+    }
 }
 
 void LocomotiveBehavior::printStartMessage()
