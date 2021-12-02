@@ -25,15 +25,21 @@ void LocomotiveBehavior::run()
     int turn = 0;
 
     while(1) {
+        loco.afficherMessage("J'attends sur un contact");
         turn < 2 ? attendre_contact(entree) : attendre_contact(sortie);
+        loco.afficherMessage("Je repars");
         sharedSection->access(loco);
         diriger_aiguillage(16, sens, 0);
         diriger_aiguillage(11, sens, 0);
+        loco.afficherMessage("J'attends sur un contact");
         turn < 2 ? attendre_contact(sortie) : attendre_contact(entree);
+        loco.afficherMessage("Je repars");
         sharedSection->leave(loco);
         if (turn % 2) {
             // changement de sens
+            loco.afficherMessage("J'attends sur un contact");
             attendre_contact(depart);
+            loco.afficherMessage("Je repars");
             loco.inverserSens();
         }
         turn = (turn + 1) % 4;
