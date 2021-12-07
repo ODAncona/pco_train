@@ -25,21 +25,21 @@ void LocomotiveBehavior::run()
     int turn = 0;
 
     while(1) {
-        loco.afficherMessage("J'attends sur un contact");
+        loco.afficherMessage("J'attends l'entrée de la section critique");
         turn < 2 ? attendre_contact(entree) : attendre_contact(sortie);
-        loco.afficherMessage("Je repars");
+        loco.afficherMessage("J'entre en section critique");
         sharedSection->access(loco);
         diriger_aiguillage(16, sens, 0);
         diriger_aiguillage(11, sens, 0);
-        loco.afficherMessage("J'attends sur un contact");
+        loco.afficherMessage("J'attends la sortie de la section critique");
         turn < 2 ? attendre_contact(sortie) : attendre_contact(entree);
-        loco.afficherMessage("Je repars");
+        loco.afficherMessage("Je sors de la section critique");
         sharedSection->leave(loco);
         if (turn % 2) {
             // changement de sens
-            loco.afficherMessage("J'attends sur un contact");
+            loco.afficherMessage("J'attends sur un contact pour changer de sens");
             attendre_contact(depart);
-            loco.afficherMessage("Je repars");
+            loco.afficherMessage("Je change de sens");
             loco.inverserSens();
         }
         turn = (turn + 1) % 4;
