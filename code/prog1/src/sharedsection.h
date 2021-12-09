@@ -22,12 +22,13 @@
 class SharedSection final : public SharedSectionInterface
 {
 public:
+    int nBlocked;
 
     /**
      * @brief SharedSection Constructeur de la classe qui représente la section partagée.
      * Initialisez vos éventuels attributs ici, sémaphores etc.
      */
-    SharedSection() : occupee(false), sectionPartagee(1), mutex(1) {
+    SharedSection() : occupee(false), blocking(0), nBlocked(0), mutex(1) {
     }
 
     /**
@@ -35,22 +36,25 @@ public:
      * locomotive et mettre son thread en attente si la section est occupée par une autre locomotive.
      * Si la locomotive et son thread ont été mis en attente,
      * le thread doit être reveillé lorsque la section partagée est à nouveau libre et
-     * la locomotive redémarée. (méthode à appeler un contact avant la section partagée).
+     * la locomotive redémarrée. (méthode à appeler un contact avant la section partagée).
      * @param loco La locomotive qui essaie accéder à la section partagée
      */
     void access(Locomotive &loco) override {
-        // TODO
         mutex.acquire();
         if (occupee) {
+            //Loco doit attendre
+            ++nBlocked;
+            mutex.release();
             loco.arreter();
+            blocking.acquire();
+
+            //Loco redémarre
+            loco.demarrer();
+        }else{
+            //Loco peut se lancer
+            occupee = true;
+            mutex.release();
         }
-        mutex.release();
-        sectionPartagee.acquire();
-        mutex.acquire();
-        occupee = true;
-        mutex.release();
-        loco.demarrer();
-        afficher_message(qPrintable(QString("The engine no. %1 accesses the shared section.").arg(loco.numero())));
     }
 
     /**
@@ -59,12 +63,14 @@ public:
      * @param loco La locomotive qui quitte la section partagée
      */
     void leave(Locomotive& loco) override {
-        // TODO
-        sectionPartagee.release();
         mutex.acquire();
-        occupee = false;
+        if(nBlocked){
+            --nBlocked;
+            blocking.release();
+        }else {
+            occupee = false;
+        }
         mutex.release();
-        afficher_message(qPrintable(QString("The engine no. %1 leaves the shared section.").arg(loco.numero())));
     }
 
     /* A vous d'ajouter ce qu'il vous faut */
@@ -73,7 +79,7 @@ private:
     // Méthodes privées ...
     // Attribut privés ...
     bool occupee;
-    PcoSemaphore sectionPartagee;
+    PcoSemaphore blocking;
     PcoSemaphore mutex;
 };
 
