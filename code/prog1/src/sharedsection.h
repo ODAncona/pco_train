@@ -22,8 +22,6 @@
 class SharedSection final : public SharedSectionInterface
 {
 public:
-    int nBlocked;
-
     /**
      * @brief SharedSection Constructeur de la classe qui représente la section partagée.
      * Initialisez vos éventuels attributs ici, sémaphores etc.
@@ -79,6 +77,7 @@ private:
     // Méthodes privées ...
     // Attribut privés ...
     bool occupee;
+    int nBlocked;
     PcoSemaphore blocking;
     PcoSemaphore mutex;
 };
