@@ -8,6 +8,8 @@
 #include "locomotivebehavior.h"
 #include "ctrain_handler.h"
 
+#define LOCO_EXTERNE 42
+
 void LocomotiveBehavior::run()
 {
     //Initialisation de la locomotive
@@ -23,6 +25,7 @@ void LocomotiveBehavior::run()
     //sharedSection->leave(loco);
 
     int turn = 0;
+    SharedSectionInterface::LocoId locoId = loco.numero() ==
 
     while(1) {
         loco.afficherMessage("J'attends l'entrée de la section critique");
