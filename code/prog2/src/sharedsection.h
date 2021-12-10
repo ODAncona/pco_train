@@ -28,7 +28,7 @@ public:
      * @brief SharedSection Constructeur de la classe qui représente la section partagée.
      * Initialisez vos éventuels attributs ici, sémaphores etc.
      */
-    SharedSection() {
+    SharedSection(): nBlocked{0}, blocking{0} , mutex{1} {
         // TODO
     }
 
@@ -41,9 +41,10 @@ public:
      */
     void request(Locomotive& loco, LocoId locoId, EntryPoint entryPoint) override {
         // TODO
-
-        // Exemple de message dans la console globale
+        mutex.acquire();
+        requestingAccess.push_back(locoId);
         afficher_message(qPrintable(QString("The engine no. %1 requested the shared section.").arg(loco.numero())));
+        mutex.release();
     }
 
     /**
@@ -57,7 +58,21 @@ public:
      */
     void getAccess(Locomotive &loco, LocoId locoId) override {
         // TODO
+        mutex.acquire();
+        if (occupee) {
+            //Loco doit attendre
+            ++nBlocked;
+            mutex.release();
+            loco.arreter();
+            blocking.acquire();
 
+            //Loco redémarre
+            loco.demarrer();
+        }else{
+            //Loco peut se lancer
+            occupee = true;
+            mutex.release();
+        }
         // Exemple de message dans la console globale
         afficher_message(qPrintable(QString("The engine no. %1 accesses the shared section.").arg(loco.numero())));
     }
@@ -70,7 +85,14 @@ public:
      */
     void leave(Locomotive& loco, LocoId locoId) override {
         // TODO
-
+        mutex.acquire();
+        if(nBlocked){
+            --nBlocked;
+            blocking.release();
+        }else {
+            occupee = false;
+        }
+        mutex.release();
         // Exemple de message dans la console globale
         afficher_message(qPrintable(QString("The engine no. %1 leaves the shared section.").arg(loco.numero())));
     }
@@ -80,6 +102,11 @@ public:
 private:
     // Méthodes privées ...
     // Attributes privés ...
+    bool occupee;
+    int nBlocked;
+    PcoSemaphore blocking;
+    PcoSemaphore mutex;
+    std::vector<LocoId> requestingAccess;
 };
 
 
