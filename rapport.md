@@ -36,8 +36,10 @@ Cette classe définit le tronçon commun aux deux locomotives, elle possède 3 m
 - getAccess(): permet de retnrer sur la section critique. 
 - leave(): permet de quitter proprement la section partagée.
 - request(): permet de gérer la priorité selon les demandes d'accès à la section partagée
+
 #### Locomotive
 
+Cette classe contient toutes les méthodes inhérentes à la locomotive. 
 #### Main
 ## Choix d'implémentation
 
