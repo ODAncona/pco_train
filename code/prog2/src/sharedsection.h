@@ -62,9 +62,9 @@ public:
         bool priority = true;
         if (nbRequests == 2) {
             if (locoId == SharedSectionInterface::LocoId::LA)
-                priority = entryPointLA != entryPointLB;
-            else
                 priority = entryPointLA == entryPointLB;
+            else
+                priority = entryPointLA != entryPointLB;
         }
         --nbRequests;
         if (occupied || !priority) {
@@ -94,7 +94,7 @@ public:
     void leave(Locomotive& loco, LocoId locoId) override {
         // TODO
         mutex.acquire();
-        if(nbBlocked){
+        if(nbBlocked) {
             --nbBlocked;
             blocking.release();
         }else {
