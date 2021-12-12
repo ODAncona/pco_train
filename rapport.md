@@ -1,6 +1,14 @@
-# Laboratoire 6 QtrainSim
+---
+title: "Laboratoire 4: Gestion de ressources"
+author: [Nicolas Wichoud, Olivier D'Ancona]
+date: "12-12-2021"
+subject: "train"
+keywords: [train, qsim, labo4, simulation]
+lang: "fr"
+titlepage: true
+...
 
-Auteurs: Nicolas Wichoud & Olivier D'Ancona
+# Laboratoire 4 Gestion de ressources
 
 ## Description des fonctionnalités du logiciel
 
@@ -48,7 +56,7 @@ Cette classe contient toutes les méthodes inhérentes à la locomotive. Par exe
 ### Choix du tracé
 
 Afin de simplifier l'écriture du code, nous avons décidé de prendre 2 tracés avec un section partagé minimale.
-![Tracé des deux locomotives](maquetteB)
+![Tracé des deux locomotives](maquetteB.png)
 
 ### Variable turn
 
