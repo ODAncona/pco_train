@@ -36,17 +36,19 @@ Les priorités sont définies de manière dynamique selon le schéma suivant:
 
 #### LocomotiveBehavior
 
-Cette classe implémente le comportement de la locomotive selon le tracé. Elle stocke les points de contacts et d'entrée en section critique ainsi que le nombre de tours respectif à chaque locomotive. Chaque Locomotive aura un comportement programmé qui inter-réagira avec la section partagée afin d'éviter tout accident. 
+Cette classe implémente le comportement de la locomotive selon le tracé. Elle stocke les points de contacts et d'entrée en section critique ainsi que le nombre de tours respectif à chaque locomotive. Chaque Locomotive aura un comportement programmé qui interagira avec la section partagée afin d'éviter tout accident. 
 
 ![diagramme du comportement](loco_behavior.png){ width=80% }
 
 #### SharedSection
 
-Cette classe définit le tronçon commun aux deux locomotives, elle possède 3 méthodes:
+Cette classe définit le tronçon commun aux deux locomotives, elle possède 3 méthodes :
 
 - getAccess(): permet de rentrer dans la section critique. 
 - leave(): permet de quitter proprement la section partagée.
 - request(): permet de gérer la priorité selon les demandes d'accès à la section partagée
+
+Cette classe sert à éviter les accidents dans la section partagée. Pour plus de détails, des commentaires ont été rédigés à cet effet. 
 
 #### Locomotive
 
@@ -79,11 +81,11 @@ Avec ce tracé, les points de requêtes seront 2,4 pour le haut et 2,9 pour le b
 
 ### Variable turn
 
-Afin de comptabiliser le nombre de tour et en même temps de tenir compte du sens nous avons utilisé une variable turn. Les deux premiers tours, l'entrée de la section critique sera l'entrée A et le troisième et quatrième tour, l'entrée sera la B. De cette manière, nous pouvons contrôler le nombre de tour avec `turn % 2` et la direction avec `sens < 2`.
+Afin de comptabiliser le nombre de tour et en même temps tenir compte du sens, nous avons utilisé une variable turn. Les deux premiers tours, l'entrée de la section critique sera l'entrée A et le troisième et quatrième tour, l'entrée sera la B. De cette manière, nous pouvons contrôler le moment du changement de sens avec `turn % 2` et la direction avec `sens < 2`. A chaque tour, nous effectuons `turn = (turn + 1) % 4` afin de répéter le comportement de manière cyclique.
 
 ### Comportement de la locomotive
 
-Nous avons intégré la direction de la locomotive dans son comportement. Etant donné la topologie du problème, les deux aiguillages dépendent du sens. 
+Nous avons intégré la direction de la locomotive dans son comportement étant donné la topologie du problème. Les deux tracés dépendent du même sens d'aiguillage.
 
 ### Shared Section
 
