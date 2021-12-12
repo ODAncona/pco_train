@@ -28,7 +28,7 @@ public:
      * @brief SharedSection Constructeur de la classe qui représente la section partagée.
      * Initialisez vos éventuels attributs ici, sémaphores etc.
      */
-    SharedSection(): nBlocked{0}, blocking{0} , mutex{1}, occupee{false},  {
+    SharedSection(): occupied(false), nbBlocked(0), blocking(0), mutex(1), nbRequests(0) {
         // TODO
     }
 
@@ -42,8 +42,8 @@ public:
     void request(Locomotive& loco, LocoId locoId, EntryPoint entryPoint) override {
         // TODO
         mutex.acquire();
-        requestingAccess.push_back(locoId);
-        afficher_message(qPrintable(QString("The engine no. %1 requested the shared section.").arg(loco.numero())));
+        locoId == SharedSectionInterface::LocoId::LA ? entryPointLA = entryPoint : entryPointLB = entryPoint;
+        ++nbRequests;
         mutex.release();
     }
 
@@ -59,9 +59,17 @@ public:
     void getAccess(Locomotive &loco, LocoId locoId) override {
         // TODO
         mutex.acquire();
-        if (occupee) {
+        bool priority = true;
+        if (nbRequests == 2) {
+            if (locoId == SharedSectionInterface::LocoId::LA)
+                priority = entryPointLA != entryPointLB;
+            else
+                priority = entryPointLA == entryPointLB;
+        }
+        --nbRequests;
+        if (occupied || !priority) {
             //Loco doit attendre
-            ++nBlocked;
+            ++nbBlocked;
             mutex.release();
             loco.arreter();
             blocking.acquire();
@@ -70,7 +78,7 @@ public:
             loco.demarrer();
         }else{
             //Loco peut se lancer
-            occupee = true;
+            occupied = true;
             mutex.release();
         }
         // Exemple de message dans la console globale
@@ -86,11 +94,11 @@ public:
     void leave(Locomotive& loco, LocoId locoId) override {
         // TODO
         mutex.acquire();
-        if(nBlocked){
-            --nBlocked;
+        if(nbBlocked){
+            --nbBlocked;
             blocking.release();
         }else {
-            occupee = false;
+            occupied = false;
         }
         mutex.release();
         // Exemple de message dans la console globale
@@ -102,11 +110,13 @@ public:
 private:
     // Méthodes privées ...
     // Attributes privés ...
-    bool occupee;
-    int nBlocked;
+    bool occupied;
+    unsigned nbBlocked;
     PcoSemaphore blocking;
     PcoSemaphore mutex;
-    std::vector<LocoId> requestingAccess;
+    unsigned nbRequests;
+    EntryPoint entryPointLA;
+    EntryPoint entryPointLB;
 };
 
 
