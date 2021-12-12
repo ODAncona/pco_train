@@ -28,7 +28,9 @@ Les priorités sont définies de manière dynamique selon le schéma suivant:
 
 #### LocomotiveBehavior
 
-Cette classe implémente le comportement de la locomotive selon le tracé. Elle stocke les points de contacts et d'entrée en section critique ainsi que le nombre de tours respectif à chaque locomotive. Chaque Locomotive aura un comportement programmé qui interéagira avec la section partagée afin d'éviter tout accident. 
+Cette classe implémente le comportement de la locomotive selon le tracé. Elle stocke les points de contacts et d'entrée en section critique ainsi que le nombre de tours respectif à chaque locomotive. Chaque Locomotive aura un comportement programmé qui inter-réagira avec la section partagée afin d'éviter tout accident. 
+
+![diagramme du comportement](loco_behavior.png)
 
 #### SharedSection
 
@@ -39,11 +41,18 @@ Cette classe définit le tronçon commun aux deux locomotives, elle possède 3 m
 
 #### Locomotive
 
-Cette classe contient toutes les méthodes inhérentes à la locomotive. 
+Cette classe contient toutes les méthodes inhérentes à la locomotive. Par exemple, elle est peut allumer les phares, démarrer la locomotive ou changer son sens. 
 #### Main
 ## Choix d'implémentation
 
 ### Choix du tracé
+
+Afin de simplifier l'écriture du code, nous avons décidé de prendre 2 tracés avec un section partagé minimale.
+![Tracé des deux locomotives](maquetteB)
+
+### Variable turn
+
+Afin de comptabiliser le nombre de tour et en même temps de tenir compte du sens nous avons utilisé une variable turn. Les deux premiers tours, l'entrée de la section critique sera l'entrée A et le troisième et quatrième tour, l'entrée sera la B.
 
 ### Comportement de la locomotive
 
