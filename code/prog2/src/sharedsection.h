@@ -26,7 +26,6 @@ public:
 
     /**
      * @brief SharedSection Constructeur de la classe qui représente la section partagée.
-     * Initialisez vos éventuels attributs ici, sémaphores etc.
      */
     SharedSection(): occupied(false), nbBlocked(0), blocking(0), mutex(1), nbRequests(0) {
     }
@@ -76,7 +75,7 @@ public:
 
             //La locomotive peut redémarrer
             loco.demarrer();
-        }else{
+        } else {
             //La locomotive peut entrer en section critique sans avoir besoin de s'arrêter
             occupied = true;
             mutex.release();
