@@ -26,7 +26,7 @@ public:
      * @brief SharedSection Constructeur de la classe qui représente la section partagée.
      * Initialisez vos éventuels attributs ici, sémaphores etc.
      */
-    SharedSection() : occupee(false), blocking(0), nBlocked(0), mutex(1) {
+    SharedSection() : occupee(false), nBlocked(0), blocking(0), mutex(1){
     }
 
     /**
