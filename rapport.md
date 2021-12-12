@@ -105,3 +105,7 @@ Grâce à la symétrie du problème nous n'avons changé `occupied` seulement da
 
 ## Tests effectués
 
+|Description|Réussite|
+|:-|:-:|
+|Mouvement en avant sur une case libre|✔️|
+|Mouvement en avant sur une case occupée|❌|
