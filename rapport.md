@@ -43,24 +43,40 @@ Cette classe implémente le comportement de la locomotive selon le tracé. Elle 
 #### SharedSection
 
 Cette classe définit le tronçon commun aux deux locomotives, elle possède 3 méthodes:
-- getAccess(): permet de retnrer sur la section critique. 
+- getAccess(): permet de rentrer dans la section critique. 
 - leave(): permet de quitter proprement la section partagée.
 - request(): permet de gérer la priorité selon les demandes d'accès à la section partagée
 
 #### Locomotive
 
-Cette classe contient toutes les méthodes inhérentes à la locomotive. Par exemple, elle est peut allumer les phares, démarrer la locomotive ou changer son sens. 
+Cette classe contient toutes les méthodes inhérentes à la locomotive : 
+
+- Constructeur
+- Méthode pour fixer le numéro
+- Méthode pour fixer la vitesse
+- Méthode pour déterminer la position initiale
+- Affichage de message
+- Allumer les phares
+- Eteindre les phares
+- Démarrage
+- Arrêt
+- Inversion du sens
+
 #### Main
+
 ## Choix d'implémentation
 
 ### Choix du tracé
 
-Afin de simplifier l'écriture du code, nous avons décidé de prendre 2 tracés avec un section partagé minimale.
-![Tracé des deux locomotives](maquetteB_path.png)
+Afin de simplifier l'écriture du code, nous avons décidé de prendre 2 tracés avec une section partagée minimale.
+
+![La locomotive A suit le tracé orange et la B le tracé bleu. La section partagée est en rouge](maquetteB_path.png)
+
+Avec ce tracé, les points de requêtes seront 2,4 pour le haut et 2,9 pour le bas. De plus, les points de contacts seront 1,5 pour le haut et 7,12 pour le bas.
 
 ### Variable turn
 
-Afin de comptabiliser le nombre de tour et en même temps de tenir compte du sens nous avons utilisé une variable turn. Les deux premiers tours, l'entrée de la section critique sera l'entrée A et le troisième et quatrième tour, l'entrée sera la B.
+Afin de comptabiliser le nombre de tour et en même temps de tenir compte du sens nous avons utilisé une variable turn. Les deux premiers tours, l'entrée de la section critique sera l'entrée A et le troisième et quatrième tour, l'entrée sera la B. De cette manière, nous pouvons contrôler le nombre de tour avec `turn % 2` et la direction avec `sens < 2`.
 
 ### Comportement de la locomotive
 
