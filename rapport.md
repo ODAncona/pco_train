@@ -30,7 +30,7 @@ Les priorités sont définies de manière dynamique selon le schéma suivant:
 - Si les deux locomotives accèdent au tronçon par le même point d’entrée, alors la locomotive LA a la priorité.
 - Si les deux locomotives accèdent au tronçon par un point d’entrée distinct (EA pour l’une et EB pour l’autre), alors la locomotive LB a la priorité sur LA.
 
-![point de contact](tracé.png)
+![point de contact avant la section partagée](tracé.png)
 
 ### Structure du code
 
@@ -38,11 +38,12 @@ Les priorités sont définies de manière dynamique selon le schéma suivant:
 
 Cette classe implémente le comportement de la locomotive selon le tracé. Elle stocke les points de contacts et d'entrée en section critique ainsi que le nombre de tours respectif à chaque locomotive. Chaque Locomotive aura un comportement programmé qui inter-réagira avec la section partagée afin d'éviter tout accident. 
 
-![diagramme du comportement](loco_behavior.png)
+![diagramme du comportement](loco_behavior.png){ width=80% }
 
 #### SharedSection
 
 Cette classe définit le tronçon commun aux deux locomotives, elle possède 3 méthodes:
+
 - getAccess(): permet de rentrer dans la section critique. 
 - leave(): permet de quitter proprement la section partagée.
 - request(): permet de gérer la priorité selon les demandes d'accès à la section partagée
@@ -64,6 +65,8 @@ Cette classe contient toutes les méthodes inhérentes à la locomotive :
 
 #### Main
 
+C'est la classe principale. Elle va tout initialiser et créer un thread par locomotive.
+
 ## Choix d'implémentation
 
 ### Choix du tracé
@@ -72,7 +75,7 @@ Afin de simplifier l'écriture du code, nous avons décidé de prendre 2 tracés
 
 ![La locomotive A suit le tracé orange et la B le tracé bleu. La section partagée est en rouge](maquetteB_path.png)
 
-Avec ce tracé, les points de requêtes seront 2,4 pour le haut et 2,9 pour le bas. De plus, les points de contacts seront 1,5 pour le haut et 7,12 pour le bas.
+Avec ce tracé, les points de requêtes seront 2,4 pour le haut et 2,9 pour le bas. De manière similaire, les points de contacts seront 1,5 pour le haut et 7,12 pour le bas.
 
 ### Variable turn
 
@@ -80,12 +83,24 @@ Afin de comptabiliser le nombre de tour et en même temps de tenir compte du sen
 
 ### Comportement de la locomotive
 
-Comment avez-vous abordé le problème, quels choix avez-vous fait, quelle 
-décomposition avez-vous choisie, quelles variables ont dû être protégées, ...
+Nous avons intégré la direction de la locomotive dans son comportement. Etant donné la topologie du problème, les deux aiguillages dépendent du sens. 
 
+### Shared Section
+
+Nous avons protégé plusieurs variables par le même mutex: 
+
+- `nbRequests`
+- `entryPointLA`
+- `entryPointLB`
+- `priority`
+- `occupied`
+
+Grâce à la symétrie du problème nous n'avons changé occupé seulement dans les cas nécessaires:
+
+- Lorsqu'une locomotive entre dans la section critique vide 
+- Lorsqu'une locomotive sort de la section critique et que personne n'attendais sa libération
 
 
 ## Tests effectués
 
-
-Description de chaque test, et information sur le fait qu'il ait passé ou non
+### Test 1
