@@ -17,13 +17,18 @@
 class LocomotiveBehavior : public Launchable
 {
 public:
-    /*!
-     * \brief locomotiveBehavior Constructeur de la classe
-     * \param loco la locomotive dont on représente le comportement
+    /**
+     * @brief LocomotiveBehavior Constructeur de la classe
+     * @param loco Locomotive dont on représente le comportement
+     * @param sharedSection Section partagée par les deux locomotives
+     * @param direction Sens dans lequel se déplace la locomotive
+     * @param entryA Premier point d'entrée/sortie de la section critique
+     * @param entryB Second point d'entrée/sortie de la section critique
+     * @param requestA Point de requête pour une entrée en section critique via entryA
+     * @param requestB Point de requête pour une entrée en section critique via entryB
      */
-    LocomotiveBehavior(Locomotive& loco, std::shared_ptr<SharedSectionInterface> sharedSection, int sens, int entreeA, int entreeB, int requeteA, int requeteB) :
-        loco(loco), sharedSection(sharedSection), sens(sens), entreeA(entreeA), entreeB(entreeB), requeteA(requeteA), requeteB(requeteB) {
-        // Eventuel code supplémentaire du constructeur
+    LocomotiveBehavior(Locomotive& loco, std::shared_ptr<SharedSectionInterface> sharedSection, int direction, int entryA, int entryB, int requestA, int requestB) :
+        loco(loco), sharedSection(sharedSection), direction(direction), entryA(entryA), entryB(entryB), requestA(requestA), requestB(requestB) {
     }
 
 protected:
@@ -58,7 +63,9 @@ protected:
      * Par exemple la priorité ou le parcours
      */
 private:
-    int sens, entreeA, entreeB, requeteA, requeteB;
+    int direction; //sens de la locomotive
+    int entryA, entryB; //extrêmités de la section critique
+    int requestA, requestB; //Points de requête pour une entrée en section critique
 };
 
 #endif // LOCOMOTIVEBEHAVIOR_H

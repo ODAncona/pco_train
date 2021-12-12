@@ -57,6 +57,8 @@ public:
     void getAccess(Locomotive &loco, LocoId locoId) override {
         mutex.acquire();
         bool priority = true;
+        //Dans le cas ou les deux locomotives font une requête d'entrée en section critique en même temps,
+        //on regarde laquelle à la priorité en fonction de leur point d'entrée
         if (nbRequests == 2) {
             if (locoId == SharedSectionInterface::LocoId::LA)
                 priority = entryPointLA == entryPointLB;
@@ -64,22 +66,21 @@ public:
                 priority = entryPointLA != entryPointLB;
         }
         --nbRequests;
+        //On regarde si la section critique est occupée ou si une locomotive de plus haute priorité veut y rentrer
         if (occupied || !priority) {
-            //Loco doit attendre
+            //La locomotive doit attendre la libération de la section critique pour continuer
             ++nbBlocked;
             mutex.release();
             loco.arreter();
             blocking.acquire();
 
-            //Loco redémarre
+            //La locomotive peut redémarrer
             loco.demarrer();
         }else{
-            //Loco peut se lancer
+            //La locomotive peut entrer en section critique sans avoir besoin de s'arrêter
             occupied = true;
             mutex.release();
         }
-        // Exemple de message dans la console globale
-        afficher_message(qPrintable(QString("The engine no. %1 accesses the shared section.").arg(loco.numero())));
     }
 
     /**
@@ -90,10 +91,13 @@ public:
      */
     void leave(Locomotive& loco, LocoId locoId) override {
         mutex.acquire();
+        //On regarde s'il y a des locomotives en file d'attente pour rentrer en section critique
         if(nbBlocked) {
+            //On permet à la première locomotive de la file d'attente de rentrer en section critique
             --nbBlocked;
             blocking.release();
         }else {
+            //On indique que la section critique est libre et disponible pour une prochaine locomotive
             occupied = false;
         }
         mutex.release();
@@ -101,15 +105,14 @@ public:
     }
 
 private:
-    // Méthodes privées ...
-    // Attributes privés ...
-    bool occupied;
-    unsigned nbBlocked;
-    PcoSemaphore blocking;
-    PcoSemaphore mutex;
-    unsigned nbRequests;
-    EntryPoint entryPointLA;
-    EntryPoint entryPointLB;
+
+    bool occupied; //Indique l'occupation ou non de la section critique par une locomotive
+    unsigned nbBlocked; //Nombre de locomotives bloquées à l'entrée de la section critique
+    PcoSemaphore blocking; //Permet de bloquer une locomotive à l'entrée de la section critique tant que celle-ci est occupée
+    PcoSemaphore mutex; //Protège les variables partagées par plusieurs fonctions (occupied, nbBlocked, nbRequests, entryPointLA et entryPointLB)
+    unsigned nbRequests; //Nombre de requêtes en cours pour entrer en section critique
+    EntryPoint entryPointLA; //Point d'entrée de la locomotive A en section critique
+    EntryPoint entryPointLB; //Point d'entrée de la locomotive B en section critique
 };
 
 
