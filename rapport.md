@@ -85,7 +85,7 @@ Afin de comptabiliser le nombre de tour et en même temps tenir compte du sens, 
 
 ### Comportement de la locomotive
 
-Nous avons intégré la direction de la locomotive dans son comportement étant donné la topologie du problème. Les deux tracés dépendent du même sens d'aiguillage.
+Nous avons intégré la direction de la locomotive dans son comportement étant donné la topologie du problème. Les deux tracés requièrent le même sens pour une pair d'aiguillage. Les locomotives ne peuvent pas avoir une position initiale dans la section critique. 
 
 ### Shared Section
 
@@ -97,12 +97,11 @@ Nous avons protégé plusieurs variables par le même mutex:
 - `priority`
 - `occupied`
 
-Grâce à la symétrie du problème nous n'avons changé occupé seulement dans les cas nécessaires:
+Grâce à la symétrie du problème nous n'avons changé `occupied` seulement dans les cas nécessaires:
 
 - Lorsqu'une locomotive entre dans la section critique vide 
-- Lorsqu'une locomotive sort de la section critique et que personne n'attendais sa libération
+- Lorsqu'une locomotive sort de la section critique et que personne n'attendait sa libération
 
 
 ## Tests effectués
 
-### Test 1
