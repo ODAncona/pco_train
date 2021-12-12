@@ -56,7 +56,7 @@ Cette classe contient toutes les méthodes inhérentes à la locomotive. Par exe
 ### Choix du tracé
 
 Afin de simplifier l'écriture du code, nous avons décidé de prendre 2 tracés avec un section partagé minimale.
-![Tracé des deux locomotives](maquetteB.png)
+![Tracé des deux locomotives](maquetteB_path.png)
 
 ### Variable turn
 

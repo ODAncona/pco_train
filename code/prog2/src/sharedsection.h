@@ -29,7 +29,6 @@ public:
      * Initialisez vos éventuels attributs ici, sémaphores etc.
      */
     SharedSection(): occupied(false), nbBlocked(0), blocking(0), mutex(1), nbRequests(0) {
-        // TODO
     }
 
     /**
@@ -40,7 +39,6 @@ public:
      * @param entryPoint Le point d'entree de la locomotive qui fait l'appel
      */
     void request(Locomotive& loco, LocoId locoId, EntryPoint entryPoint) override {
-        // TODO
         mutex.acquire();
         locoId == SharedSectionInterface::LocoId::LA ? entryPointLA = entryPoint : entryPointLB = entryPoint;
         ++nbRequests;
@@ -57,7 +55,6 @@ public:
      * @param locoId L'identidiant de la locomotive qui fait l'appel
      */
     void getAccess(Locomotive &loco, LocoId locoId) override {
-        // TODO
         mutex.acquire();
         bool priority = true;
         if (nbRequests == 2) {
@@ -92,7 +89,6 @@ public:
      * @param locoId L'identidiant de la locomotive qui fait l'appel
      */
     void leave(Locomotive& loco, LocoId locoId) override {
-        // TODO
         mutex.acquire();
         if(nbBlocked){
             --nbBlocked;
@@ -101,11 +97,8 @@ public:
             occupied = false;
         }
         mutex.release();
-        // Exemple de message dans la console globale
         afficher_message(qPrintable(QString("The engine no. %1 leaves the shared section.").arg(loco.numero())));
     }
-
-    /* A vous d'ajouter ce qu'il vous faut */
 
 private:
     // Méthodes privées ...

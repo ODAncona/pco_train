@@ -52,12 +52,12 @@ void LocomotiveBehavior::run()
         if(turn < 2) {
             /* Sens 1 */
 
-            // Request
+            // Requête
             attendre_contact(requeteA);
             sharedSection->request(loco, locoId, entryPoint);
             loco.afficherMessage("J'attends l'entrée de la section critique");
 
-            // Enter shared section
+            // Entrée en section partagée
             attendre_contact(entreeA);
             loco.afficherMessage("J'essaie d'entrer en section critique");
             sharedSection->getAccess(loco, locoId);
@@ -65,7 +65,7 @@ void LocomotiveBehavior::run()
             diriger_aiguillage(16, sens, 0);
             diriger_aiguillage(11, sens, 0);
 
-            // Exit shared section
+            // Sortie de la section partagée
             loco.afficherMessage("J'attends la sortie de la section critique");
             attendre_contact(entreeB);
             loco.afficherMessage("Je sors de la section critique");
@@ -73,12 +73,12 @@ void LocomotiveBehavior::run()
         }else {
             /* Sens 2 */
 
-            // Request
+            // Requête
             attendre_contact(requeteB);
             sharedSection->request(loco, locoId, entryPoint);
             loco.afficherMessage("J'attends l'entrée de la section critique");
 
-            // Enter shared section
+            // Entrée en section partagée
             attendre_contact(entreeB);
             loco.afficherMessage("J'essaie d'entrer en section critique");
             sharedSection->getAccess(loco, locoId);
@@ -86,14 +86,14 @@ void LocomotiveBehavior::run()
             diriger_aiguillage(16, sens, 0);
             diriger_aiguillage(11, sens, 0);
 
-            // Exit shared section
+            // Sortie de la section partagée
             loco.afficherMessage("J'attends la sortie de la section critique");
             attendre_contact(entreeA);
             loco.afficherMessage("Je sors de la section critique");
             sharedSection->leave(loco, locoId);
         }
         if (turn % 2) {
-            // Switching direction
+            // Changement de direction
             loco.afficherMessage("J'attends sur un contact pour changer de sens");
             turn < 2 ? attendre_contact(entreeA) : attendre_contact(entreeB);
             loco.afficherMessage("Je change de sens");
