@@ -105,7 +105,23 @@ Grâce à la symétrie du problème nous n'avons changé `occupied` seulement da
 
 ## Tests effectués
 
+### Programme 1
+
 |Description|Réussite|
 |:-|:-:|
-|Mouvement en avant sur une case libre|✔️|
-|Mouvement en avant sur une case occupée|❌|
+|Les deux locomotives s'arrêtent immédiatement en cas d'arrêt d'urgence|OK|
+|Les deux locomotives changent de sens tous les deux tours|OK|
+|Une locomotive ne s'arrête pas avant la section critique si celle-ci est libre|OK|
+|Une locomotive s'arrête à l'entrée de la section critique si celle-ci est occupée par une autre locomotive allant dans le même sens puis redémarre à la libération de la section critique|OK|
+|Une locomotive s'arrête à l'entrée de la section critique si celle-ci est occupée par une autre locomotive allant dans le sens contraire puis redémarre à la libération de la section critique|OK|
+
+### Programme 2
+
+|Description|Réussite|
+|:-|:-:|
+|Les deux locomotives s'arrêtent immédiatement en cas d'arrêt d'urgence|OK|
+|Les deux locomotives changent de sens tous les deux tours|OK|
+|Une locomotive ne s'arrête pas avant la section critique si celle-ci est libre et qu'aucune autre locomotive de priorité plus élevée n'a fait de requête d'entrée|OK|
+|Une locomotive s'arrête à l'entrée de la section critique si celle-ci est occupée par une autre locomotive puis redémarre à la libération de la section critique|OK|
+|La locomotive A s'arrête à l'entrée de la section critique si celle-ci est libre mais que la locomotive B arrivant en sens inverse a fait une requête d'entrée puis redémarre à la libération de la section critique|OK|
+|La locomotive B s'arrête à l'entrée de la section critique si celle-ci est libre mais que la locomotive A arrivant dans le même sens a fait une requête d'entrée puis redémarre à la libération de la section critique|OK|
